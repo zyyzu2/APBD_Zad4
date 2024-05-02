@@ -28,7 +28,7 @@ public class OrderRepository : IOrderRepository
     {
         await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         await connection.OpenAsync();
-        await using var command = new SqlCommand("SELECT * FROM \"Order\" WHERE IdProduct = @idproduct AND Amount = @amount AND CreatedAt < @date AND FulfilledAt = NULL", connection);
+        await using var command = new SqlCommand("SELECT * FROM \"Order\" WHERE IdProduct = @idProduct AND Amount = @amount AND CreatedAt < @date", connection);
         command.Parameters.AddWithValue("@idProduct", idProduct);
         command.Parameters.AddWithValue("@amount", amount);
         command.Parameters.AddWithValue("@date", createdAt);
@@ -40,8 +40,7 @@ public class OrderRepository : IOrderRepository
                 IdOrder = (int)reader["IdOrder"],
                 IdProduct = (int)reader["IdProduct"],
                 Amount = (int)reader["Amount"],
-                CreatedAt = DateTime.Parse(reader["IdOrder"].ToString()!),
-                FullfilledAt = DateTime.Parse(reader["FulfilledAt"].ToString()!),
+                CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString()!),
             };
             return order;
         }

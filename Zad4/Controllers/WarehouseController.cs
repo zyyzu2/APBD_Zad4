@@ -22,7 +22,7 @@ public class WarehouseController : ControllerBase
         try
         {
             var createdId = await _warehouseService.RegisterProductAsync(dto);
-            return Ok(createdId);
+            return (createdId==null) ? StatusCode(StatusCodes.Status500InternalServerError) : Ok(createdId);
         }
         catch (NotFoundException e)
         {
