@@ -15,7 +15,7 @@ public class ProductRepository : IProductRepository
     {
         await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         await connection.OpenAsync();
-        await using var command = new SqlCommand("COUNT (*) FROM Product WHERE IdProduct = @id", connection);
+        await using var command = new SqlCommand(" SELECT COUNT(*) FROM Product WHERE IdProduct = @id", connection);
         command.Parameters.AddWithValue("@id", idProduct);
         var result = (int)(await command.ExecuteScalarAsync())!;
         return result;

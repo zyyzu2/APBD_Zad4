@@ -35,6 +35,7 @@ public class WarehouseRepository : IWarehouseRepository
             command.Parameters.AddWithValue("@idOrder", idOrder);
             command.Parameters.AddWithValue("@Amount", amount);
             var idProductWarehouse = (int)(await command.ExecuteScalarAsync())!;
+            await transaction.CommitAsync();
             return idProductWarehouse;
         }
         catch
@@ -48,7 +49,7 @@ public class WarehouseRepository : IWarehouseRepository
     {
         await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         await connection.OpenAsync();
-        await using var command = new SqlCommand("COUNT (*) FROM Warehouse WHERE IdWarehouse = @id", connection);
+        await using var command = new SqlCommand("SELECT COUNT(IdWarehouse) FROM Warehouse WHERE IdWarehouse = @id", connection);
         command.Parameters.AddWithValue("@id", idWarehouse);
         var result = (int)(await command.ExecuteScalarAsync())!;
         return result;
@@ -58,7 +59,7 @@ public class WarehouseRepository : IWarehouseRepository
     {
         await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         await connection.OpenAsync();
-        await using var command = new SqlCommand("COUNT (*) FROM Product_Warehouse WHERE IdOrder = @id", connection);
+        await using var command = new SqlCommand("SELECT COUNT(IdOrder) FROM Product_Warehouse WHERE IdOrder = @id", connection);
         command.Parameters.AddWithValue("@id", idOrder);
         var result = (int)(await command.ExecuteScalarAsync())!;
         return result == 0;

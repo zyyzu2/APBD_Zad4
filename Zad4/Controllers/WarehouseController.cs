@@ -36,10 +36,5 @@ public class WarehouseController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-        catch (Exception e)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
-
     }
 }
